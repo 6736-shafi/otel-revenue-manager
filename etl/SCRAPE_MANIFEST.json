@@ -1,8 +1,8 @@
 {
-  "anchor_date": "2026-06-15",
+  "anchor_date": "2026-06-16",
   "pages_scraped": 3,
   "reservation_ids_count": 250,
   "reservation_ids_sha256": "3b917b93ca377be4d63fdefb91ef58803c683b2274e6be6852036b7e72850b27",
   "source_url": "https://otel-hackathon-data-site.vercel.app",
-  "scraped_at": "2026-06-15T07:34:15.907350+00:00"
+  "scraped_at": "2026-06-16T10:40:11.647745+00:00"
 }

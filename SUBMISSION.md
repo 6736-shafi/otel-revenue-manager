@@ -43,14 +43,14 @@ GET https://otel-revenue-manager.railway.app/health
 - [x] Tests: tests/test_tools.py (≥10 cases), tests/test_skills.py (≥5 cases), tests/test_agent.py (≥4 cases)
 
 ### Phase 3 - Skills and Architecture
-- [x] SKILL_OTB_HEALTH.md (judgment: occupancy ≥80%, ADR ≥£150)
-- [x] SKILL_SEGMENT_ANALYSIS.md (judgment: OTA >50% = high risk)
-- [x] SKILL_PICKUP_ANALYSIS.md (judgment: 7-day pickup <20 RN = slow)
-- [x] SKILL_GROUP_ANALYSIS.md (judgment: block >40% = displacement risk)
-- [x] SKILL_CANCELLATION_RISK.md (judgment: cancel rate >25% = high risk)
-- [x] SKILL_ROOM_TYPE_MIX.md (judgment: upsell thresholds)
-- [x] CHALLENGE_SKILL.md (version: otel-rm-v2, comprehensive briefing)
-- [x] ARCHITECTURE.md (1-page covering all 8 required sections)
+- [x] skills/otb-health/SKILL.md (judgment: occ <60% = at-risk, ADR <£120 = low)
+- [x] skills/segment-analysis/SKILL.md (judgment: OTA >50% = high risk)
+- [x] skills/pickup-analysis/SKILL.md (judgment: 7-day pickup <20 RN = slow)
+- [x] skills/group-analysis/SKILL.md (judgment: block >40% = displacement risk)
+- [x] skills/cancellation-risk/SKILL.md (judgment: cancel rate >25% = high risk; HITL gate)
+- [x] skills/room-type-mix/SKILL.md (judgment: Superior <30% booked = upsell opportunity)
+- [x] skills/CHALLENGE_SKILL.md (version: otel-rm-v2, master routing + morning briefing)
+- [x] ARCHITECTURE.md (≤1 page: skill→tool routing matrix, subagent + HITL documented)
 
 ### Phase 4 - Deploy
 - [x] Streamlit chat UI (ui/app.py)

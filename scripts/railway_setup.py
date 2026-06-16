@@ -7,7 +7,7 @@ import os
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
 import psycopg2
@@ -55,8 +55,13 @@ def main():
             count = cur.fetchone()[0]
         print(f"  ✅ Data already loaded ({count} rows)")
     else:
-        print("  ⚠️  No data found — run ETL manually:")
-        print("     DATABASE_URL=<url> python etl/run_etl.py")
+        print("  ⚠️  No data found — automatically running ETL...")
+        conn.close()
+        # Run ETL inline
+        import asyncio
+        from etl.run_etl import main as etl_main
+        asyncio.run(etl_main())
+        return
 
     conn.close()
     print("\n✅ Database setup complete!")
