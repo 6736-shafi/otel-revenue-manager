@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "generated_at": "2026-06-15T07:42:43.194670+00:00",
+  "command": "scripts/compute_load_fingerprint.py --manifest etl/SCRAPE_MANIFEST.json --output etl/LOAD_PROOF.json",
+  "database_url_redacted": "postgresql://***:***@localhost:5433/hotel_hackathon",
+  "row_counts": {
+    "reservations_hackathon": 510,
+    "room_type_lookup": 6,
+    "rate_plan_lookup": 26,
+    "market_code_lookup": 10,
+    "market_macro_group_history": 11,
+    "channel_code_lookup": 4,
+    "load_manifest": 1
+  },
+  "reservation_stay_status_sha256": "a458a75f22c171dd092946e5b9788f42f219eab1c3f9acf5c6f44728e128aac2",
+  "dataset_revision": "2026-06-15",
+  "load_manifest_row_hash": "a458a75f22c171dd092946e5b9788f42f219eab1c3f9acf5c6f44728e128aac2",
+  "load_manifest_scraped_at": "2026-06-15 07:34:15.90735+00",
+  "aggregates": {
+    "posted_stay_rows": 466,
+    "posted_reservations": 232,
+    "posted_otb_room_nights": 959,
+    "provisional_row_count": 5,
+    "posted_room_revenue": 178883.0,
+    "active_room_nights": 968,
+    "july_2025_posted_total_revenue": 11515.0,
+    "cancelled_reservation_count": 18,
+    "property_date_mismatch_count": 0
+  },
+  "verify_page_url": "https://otel-hackathon-data-site.vercel.app/verify",
+  "notes": "Compare row_counts and aggregates against the data site /verify page. dataset_revision must match the latest load_manifest row and the site.",
+  "scrape_manifest_check": {
+    "manifest_path": "etl/SCRAPE_MANIFEST.json",
+    "manifest_anchor_date": "2026-06-15",
+    "manifest_pages_scraped": 3,
+    "db_reservation_ids_count": 250,
+    "db_reservation_ids_sha256": "3b917b93ca377be4d63fdefb91ef58803c683b2274e6be6852036b7e72850b27",
+    "manifest_valid": true,
+    "manifest_errors": []
+  }
+}

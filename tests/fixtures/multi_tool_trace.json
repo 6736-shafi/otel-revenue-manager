@@ -1,0 +1,73 @@
+{
+  "question": "What's driving July and how did we book lately?",
+  "description": "Composite question requiring OTB health + pickup pace — agent must use ≥2 tools",
+  "expected_tools": ["get_otb_summary", "get_pickup_delta"],
+  "note": "Agent decomposes: (1) get_otb_summary('2025-07') for what's on the books, (2) get_pickup_delta(7, '2025-07-01') for recent pace. Planning via TodoListMiddleware orders steps before execution.",
+  "trace_events": [
+    {
+      "event": "on_tool_start",
+      "name": "write_todos",
+      "data": {
+        "input": {
+          "todos": [
+            "Get July OTB summary via get_otb_summary",
+            "Get 7-day pickup pace via get_pickup_delta"
+          ]
+        }
+      }
+    },
+    {
+      "event": "on_tool_start",
+      "name": "get_otb_summary",
+      "data": {
+        "input": {"stay_month": "2025-07", "exclude_cancelled": true}
+      }
+    },
+    {
+      "event": "on_tool_end",
+      "name": "get_otb_summary",
+      "data": {
+        "output": {
+          "stay_month": "2025-07",
+          "reservation_count": 48,
+          "room_nights": 312,
+          "room_revenue": 46800.0,
+          "total_revenue": 51480.0,
+          "adr": 150.0,
+          "exclude_cancelled": true
+        }
+      }
+    },
+    {
+      "event": "on_tool_start",
+      "name": "get_pickup_delta",
+      "data": {
+        "input": {"booking_window_days": 7, "future_stay_from": "2025-07-01"}
+      }
+    },
+    {
+      "event": "on_tool_end",
+      "name": "get_pickup_delta",
+      "data": {
+        "output": {
+          "booking_window_days": 7,
+          "new_reservations": 12,
+          "new_room_nights": 34,
+          "new_total_revenue": 5100.0,
+          "by_segment": [
+            {"market_code": "OTA", "new_room_nights": 20},
+            {"market_code": "BAR", "new_room_nights": 14}
+          ]
+        }
+      }
+    },
+    {
+      "event": "on_chat_model_stream",
+      "data": {
+        "chunk": {
+          "content": "We have 312 room nights on the books for July at £150 ADR — on track. Last 7 days picked up 34 room nights, led by OTA (59%). I'd recommend a rate nudge on OTA to protect margin."
+        }
+      }
+    }
+  ]
+}

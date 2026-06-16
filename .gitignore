@@ -1,0 +1,17 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+etl/raw_data.json
+etl/__pycache__/
+agent/__pycache__/
+tools/__pycache__/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.streamlit/
+logs/
+mermaid-diagram.png
+.claude/
