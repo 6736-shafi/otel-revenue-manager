@@ -203,6 +203,40 @@ schema.sql      Postgres table definitions
 
 ---
 
+## Future enhancements
+
+This challenge implements one hotel's revenue picture. The architecture is designed to extend — here is where it goes next.
+
+### 1. Rate recommendation engine
+
+The agent currently *describes* the situation. The next layer is *prescribing* specific actions: "Raise BAR by £15 for the 14-day window — OTA pickup is accelerating and you're 68% occupied." This requires adding a `suggest_rate_action` tool that combines OTB, pickup pace, and competitor context, then encodes a yield curve into a new skill. The judgment stays in code; the model communicates it.
+
+### 2. Multi-property portfolio view
+
+A single-hotel agent is a proof case. A GM running three properties needs a portfolio skill that fans out across property-scoped tool calls, aggregates risk signals, and surfaces the property that needs attention first. The subagent pattern already handles routing — extending it to `PropertySubAgent` per site is the natural step. Each property gets its own DB schema (or schema namespace) and its own skill pack. The orchestrator agent reasons across them.
+
+### 3. Proactive briefings and anomaly alerts
+
+Right now the agent is reactive — the GM asks, it answers. The next layer is scheduled proactive events: a morning briefing pushed at 07:00 London time when pickup drops below threshold, a cancellation spike alert when a block cancels above £5k. LangGraph's subgraph triggers and cron-based invocation make this composable without changing the core agent structure.
+
+### 4. Competitor rate intelligence via MCP
+
+The `get_as_of_otb` HITL gate exists precisely because some operations need external data before the agent can reason. Competitor rate shopping (OTA rate scrape, channel parity check) is the natural MCP server to bolt in. An MCP tool returning `{competitor_bar, parity_gap, channel}` gives the segment analysis skill real market context — not just "OTA is 50% of our mix" but "OTA is 50% of our mix and we're £12 below comp set."
+
+### 5. Persistent long-term memory across stays and seasons
+
+The current `InMemorySaver` checkpointer is session-scoped. For a GM who has been using the agent for 12 months, the memory layer should surface seasonal patterns: "Last July you had the same OTA concentration issue and tightened non-refundable rates two weeks out — that moved ADR £8." This requires a durable memory backend (Postgres or vector store) with a retrieval skill that surfaces relevant historical context before the agent answers.
+
+### 6. PMS integration and live data sync
+
+The ETL today is a daily batch scrape. Production requires a PMS webhook or polling integration so OTB is updated within minutes of a booking or cancellation. The tool layer already isolates the DB contract — swapping the ETL backend from scrape to live API is a data pipeline change, not an agent change. This is the architecture's key correctness bet: the tools own the grain, the agent never touches raw records.
+
+### 7. Deeper subagent specialisation
+
+The current segment-analyst subagent handles mix questions. The pattern scales to a `yield-optimizer` subagent that owns all rate and inventory decisions, a `group-coordinator` subagent that handles contract and block negotiation context, and an `events-impact` subagent that pulls local demand signals (concerts, conferences) and maps them to pickup patterns. Each subagent gets its own skill pack and tool surface — the orchestrator decides who to call.
+
+---
+
 ## Submission
 
 See [SUBMISSION.md](SUBMISSION.md) for the live URL, health endpoint, and full phase checklist.
