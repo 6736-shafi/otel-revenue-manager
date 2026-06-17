@@ -38,9 +38,43 @@ st.markdown("""
 .risk-high { color: #dc3545; font-weight: bold; }
 .risk-watch { color: #fd7e14; font-weight: bold; }
 .risk-ok { color: #28a745; font-weight: bold; }
+.login-box {
+    max-width: 380px; margin: 80px auto; padding: 40px;
+    border: 1px solid #dee2e6; border-radius: 12px;
+    background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
 </style>
 """, unsafe_allow_html=True)
 
+# ── Login gate ────────────────────────────────────────────────────────────────
+APP_USERNAME = os.environ.get("APP_USERNAME", "admin")
+APP_PASSWORD = os.environ.get("APP_PASSWORD", "revenue2025")
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    st.markdown("""
+    <div class="login-box">
+        <h2 style="text-align:center; margin-bottom:8px;">🏨 Revenue Manager</h2>
+        <p style="text-align:center; color:#666; margin-bottom:24px;">Sign in to continue</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col = st.columns([1, 2, 1])[1]
+    with col:
+        username = st.text_input("Username", key="login_user")
+        password = st.text_input("Password", type="password", key="login_pass")
+        if st.button("Sign in", use_container_width=True, type="primary"):
+            import secrets as _sec
+            if _sec.compare_digest(username, APP_USERNAME) and _sec.compare_digest(password, APP_PASSWORD):
+                st.session_state.authenticated = True
+                st.rerun()
+            else:
+                st.error("Invalid username or password.")
+    st.stop()
+
+# ── Authenticated ─────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="main-header">
     <h1>🏨 Hotel Revenue Manager</h1>
@@ -64,12 +98,20 @@ def check_llm():
     groq_key = os.environ.get("GROQ_API_KEY", "").strip()
     openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+    deepseek_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+    github_token = os.environ.get("GITHUB_TOKEN", "").strip()
+    if provider == "deepseek" and deepseek_key:
+        return True, "DeepSeek"
+    if provider == "github" and github_token:
+        return True, "GitHub Models (GPT-4o)"
     if provider == "groq" and groq_key:
         return True, "Groq"
     if provider == "openai" and openai_key:
         return True, "OpenAI"
     if provider == "anthropic" and anthropic_key:
         return True, "Anthropic (check credits)"
+    if deepseek_key:
+        return True, "DeepSeek"
     if groq_key:
         return True, "Groq"
     if openai_key:
@@ -136,8 +178,11 @@ with st.sidebar:
                     help="Direct Query works without an API key")
 
     st.markdown("---")
-    if st.button("🗑️ Clear", width='stretch'):
+    if st.button("🗑️ Clear", use_container_width=True):
         st.session_state.messages = []
+        st.rerun()
+    if st.button("🔓 Sign out", use_container_width=True):
+        st.session_state.authenticated = False
         st.rerun()
 
 
@@ -387,6 +432,9 @@ Get a free key at: https://console.groq.com
                             )
                         else:
                             response_text = f"⚠️ Error: {err}"
+                    elif ev["type"] == "approval_required":
+                        response_text = ev["content"]
+                        st.session_state["pending_approval"] = True
                     elif ev["type"] == "done":
                         break
 

@@ -62,6 +62,16 @@ def get_llm(model_name: str | None = None, temperature: float = 0.1):
         from langchain_ollama import ChatOllama
         m = model_name or os.environ.get("OLLAMA_MODEL", "llama3.2")
         return ChatOllama(model=m, base_url=ollama_base, temperature=temperature)
+    elif provider == "deepseek":
+        from langchain_openai import ChatOpenAI
+        deepseek_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+        m = model_name or os.environ.get("DEEPSEEK_MODEL", "deepseek-chat")
+        return ChatOpenAI(
+            model=m,
+            temperature=temperature,
+            api_key=deepseek_key,
+            base_url="https://api.deepseek.com/v1",
+        )
     elif provider == "groq" or (provider == "auto" and groq_key):
         from langchain_groq import ChatGroq
         m = model_name or os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
@@ -171,7 +181,6 @@ def create_agent():
         skills=[SKILLS_DIR],
         memory=[MEMORY_FILE],
         subagents=[SEGMENT_SUBAGENT],
-        interrupt_on={"get_as_of_otb": True},
         backend=_make_backend(),
         checkpointer=get_checkpointer(),
         name="revenue-manager",
@@ -181,6 +190,7 @@ def create_agent():
 def _use_lightweight() -> bool:
     """Use a lightweight ReAct agent when the provider can't handle deepagents overhead."""
     provider = os.environ.get("LLM_PROVIDER", "auto").lower()
+    # github and deepseek use full deepagents stack with HITL
     return provider == "groq"
 
 

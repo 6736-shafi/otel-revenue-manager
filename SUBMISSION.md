@@ -65,5 +65,5 @@ GET https://otel-revenue-manager.railway.app/health
 - Database: PostgreSQL 16 (Docker locally, Neon for production)
 - Backend: FastAPI + LangGraph agent
 - UI: Streamlit with tool call visibility
-- Agent: Claude Opus 4.6 (main) + Claude Sonnet 4.6 (segment subagent)
+- Agent: DeepSeek (main) + Claude Sonnet 4.6 (segment subagent)
 - ETL: Playwright + psycopg2 (batch scrape, idempotent load)

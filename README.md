@@ -59,9 +59,11 @@ Required variables:
 
 ```env
 DATABASE_URL=postgresql://hackathon:hackathon@localhost:5433/hotel_hackathon
-LLM_PROVIDER=anthropic          # or groq / openai
-ANTHROPIC_API_KEY=sk-ant-...    # recommended — full deepagents stack
+LLM_PROVIDER=deepseek           # or anthropic / openai / groq / github
+DEEPSEEK_API_KEY=sk-...         # recommended — full deepagents stack with HITL
+ANTHROPIC_API_KEY=sk-ant-...    # full deepagents stack
 GROQ_API_KEY=gsk_...            # free tier — lightweight ReAct fallback
+GITHUB_TOKEN=ghp_...            # GitHub Models (GPT-4o via Azure)
 APP_USERNAME=admin
 APP_PASSWORD=revenue2025
 SECRET_KEY=your-secret-key

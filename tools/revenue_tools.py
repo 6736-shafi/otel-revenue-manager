@@ -338,7 +338,26 @@ def get_as_of_otb(stay_month: str, as_of_utc: str) -> dict[str, Any]:
         Point-in-time OTB with: stay_month, as_of_utc, row_count,
         reservation_count, room_nights, room_revenue, total_revenue
     """
-    # NOTE: This tool is gated behind human approval in the agent layer
+    try:
+        from langgraph.types import interrupt as lg_interrupt, Interrupt
+
+        # ── HITL gate ──────────────────────────────────────────────────────────
+        # interrupt() raises a GraphInterrupt exception which LangGraph catches
+        # to pause the graph. MUST NOT be caught by the outer try/except.
+        approval = lg_interrupt(
+            f"⚠️ **Human Approval Required**\n\n"
+            f"Running `get_as_of_otb` for **{stay_month}** as of **{as_of_utc}**.\n"
+            f"This is an expensive point-in-time database rebuild.\n\n"
+            f"**Do you approve?** Reply **yes** to proceed or **no** to cancel."
+        )
+        if not approval:
+            return {"cancelled": True, "message": "Operation cancelled by user."}
+        # ── end HITL gate ──────────────────────────────────────────────────────
+
+    except Exception as e:
+        # Re-raise LangGraph's Interrupt so the graph can pause correctly
+        raise
+
     try:
         year, month = stay_month.split("-")
         year, month = int(year), int(month)
