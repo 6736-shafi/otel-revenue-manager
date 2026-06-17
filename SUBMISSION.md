@@ -5,10 +5,13 @@
 - Submission Date: 2026-06-15
 
 ## Solution Repository URL
-https://github.com/shafiuddin/otel-revenue-manager
+https://github.com/6736-shafi/otel-revenue-manager
 
 ## Live Agent URL
-https://otel-revenue-manager.railway.app
+https://otel-revenue-manager-production.up.railway.app/
+
+## Demo Video
+https://www.youtube.com/watch?v=1R-JFIycf0s
 
 ## Basic Auth Credentials
 - Username: `admin`
