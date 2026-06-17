@@ -28,7 +28,7 @@ It streams tool calls and skill loads live in the UI so you can see exactly what
 | Planning | `TodoListMiddleware` (built-in) |
 | Memory | `MemoryMiddleware` + `InMemorySaver` checkpointer |
 | Skills | `FilesystemMiddleware` + `FilesystemBackend` (7 SKILL.md files) |
-| HITL | `HumanInTheLoopMiddleware` on `get_as_of_otb` |
+| HITL | Native LangGraph `interrupt()` in `get_as_of_otb` |
 | Subagent | `SubAgent` (segment-analyst) |
 | Backend | FastAPI |
 | UI | Streamlit (streams tool/skill events) |
@@ -59,11 +59,10 @@ Required variables:
 
 ```env
 DATABASE_URL=postgresql://hackathon:hackathon@localhost:5433/hotel_hackathon
-LLM_PROVIDER=deepseek           # or anthropic / openai / groq / github
+LLM_PROVIDER=deepseek           # or anthropic / openai / groq
 DEEPSEEK_API_KEY=sk-...         # recommended — full deepagents stack with HITL
 ANTHROPIC_API_KEY=sk-ant-...    # full deepagents stack
 GROQ_API_KEY=gsk_...            # free tier — lightweight ReAct fallback
-GITHUB_TOKEN=ghp_...            # GitHub Models (GPT-4o via Azure)
 APP_USERNAME=admin
 APP_PASSWORD=revenue2025
 SECRET_KEY=your-secret-key
@@ -133,7 +132,7 @@ create_deep_agent(
 | Planning | `TodoListMiddleware` decomposes multi-part questions via `write_todos` |
 | Memory | `MemoryMiddleware` + `InMemorySaver` checkpointer by `thread_id` |
 | Filesystem | `FilesystemBackend` for virtual skill file reads |
-| HITL | `HumanInTheLoopMiddleware` gates `get_as_of_otb` behind approval |
+| HITL | Native LangGraph `interrupt()` gates `get_as_of_otb` |
 
 ---
 
