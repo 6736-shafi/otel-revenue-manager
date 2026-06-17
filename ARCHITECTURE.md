@@ -25,7 +25,7 @@ Postgres 16. Views: `vw_stay_night_base` (non-cancelled, Posted) and `vw_segment
 | Subagents | `subagents=[SEGMENT_SUBAGENT]` | segment-analyst routes segment/block-mix queries |
 | Planning | built-in TodoListMiddleware | `write_todos` decomposes multi-part questions |
 | Memory | `memory=["memory/AGENTS.md"]` + `InMemorySaver` checkpointer | Persistent context + multi-turn state by thread_id |
-| HITL | `interrupt_on={"get_as_of_otb": True}` | HumanInTheLoopMiddleware gates expensive point-in-time rebuild |
+| HITL | Native LangGraph `interrupt()` | Manual `interrupt()` call inside `get_as_of_otb` gates expensive point-in-time rebuild |
 | Filesystem | `backend=FilesystemBackend(root_dir=…)` | Virtual FS for skill file reads |
 
 ## Skill → Tool Routing
