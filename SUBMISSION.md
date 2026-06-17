@@ -62,7 +62,7 @@ GET https://otel-revenue-manager.railway.app/health
 - [x] HITL for get_as_of_otb
 
 ## Architecture Summary
-- Database: PostgreSQL 16 (Docker locally, Neon for production)
+- Database: PostgreSQL 16 (Docker locally, Railway for production)
 - Backend: FastAPI + LangGraph agent
 - UI: Streamlit with tool call visibility
 - Agent: DeepSeek (main) + Claude Sonnet 4.6 (segment subagent)
